@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>芯世界</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+		<!-- Link Swiper's CSS -->
+		<link rel="stylesheet" href="css/swiper.min.css">
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/rem.js"></script>
+		<script src="js/vue.js"></script>
+		<!-- Demo styles -->
+		<style>
+			html,
+			body {
+				position: relative;
+				height: 100%;
+			}
+
+			body {
+				background: #eee;
+				font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+				font-size: 14px;
+				color: #000;
+				margin: 0;
+				padding: 0;
+			}
+
+			#app {
+				width: 100%;
+				height: 100%;
+			}
+
+			.swiper-container {
+				width: 100%;
+				height: 100%;
+			}
+
+			.swiper-slide {
+				text-align: center;
+				font-size: 18px;
+				background: #fff;
+				/* Center slide text vertically */
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: -webkit-flex;
+				-webkit-box-pack: center;
+				-ms-flex-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				-webkit-box-align: center;
+				-ms-flex-align: center;
+				/* -webkit-align-items: center; */
+				/* align-items: center; */
+				overflow: hidden;
+				object-fit: cover;
+				/* height: 100%; */
+				/* width: 100%; */
+				display: flex;
+				flex-direction: column;
+				display: -moz-box;
+			}
+
+			.swiper-slide .img_con {
+				width: 100%;
+				height: 100%;
+				display: block;
+			}
+
+			.swiper-container-v {
+				/* background: #fff; */
+			}
+
+			.box {
+				width: 100%;
+				height: 16.219%;
+				background: rgba(34, 34, 34, 1);
+			}
+
+			.box img {
+				width: 100%;
+				/* height: 100%; */
+			}
+
+			.logo {
+				position: absolute;
+				width: 1.3rem;
+				height: 0.32rem;
+				top: 0.14rem;
+				left: 4.14rem;
+				z-index: 100;
+			}
+
+			.guanyu {
+				width: 0.85rem;
+				height: 0.28rem;
+				border-radius: 0.5rem;
+				line-height: 0.28rem;
+				text-align: center;
+				border: 1px solid #fff;
+				font-size: 0.14rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #fff;
+				position: absolute;
+				top: 0.16rem;
+				left: 13.1rem;
+				cursor: pointer;
+				z-index: 100;
+			}
+
+			.swiper-pagination-bullet {
+				opacity: 1;
+				background: #fff;
+			}
+
+			.swiper-pagination-bullet-active {
+				opacity: 1;
+				background: #007aff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- Swiper -->
+			<img src="img/logo.png" class="logo">
+			<div class="guanyu" @click="guanyu()">关于我们</div>
+			<div class="swiper-container swiper-container-h">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" v-for="(item,index) in list" v-if="item.type!='尾部'">
+						<div class="swiper-container swiper-container-v">
+							<div class="swiper-wrapper">
+								<div class="swiper-slide" v-for="(a,b) in item.all">
+									<img :src="add+a.img" class="img_con">
+								</div>
+							</div>
+							<div class="swiper-pagination swiper-pagination-v"></div>
+						</div>
+					</div>
+					<div class="swiper-slide" style="display: flow-root;" v-for="(item,index) in list" v-if="item.type=='尾部'">
+						<div class="swiper-container swiper-container-v" style="height: 83.79%;">
+							<div class="swiper-wrapper">
+								<div class="swiper-slide" v-for="(a,b) in item.all">
+									<img :src="add+a.img" class="img_con">
+								</div>
+							</div>
+							<div class="swiper-pagination swiper-pagination-v"></div>
+						</div>
+						<div class="box">
+							<img src="img/bott.png">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</body>
+	<!-- Swiper JS -->
+	<script src="js/swiper-4.3.3.min.js"></script>
+
+	<!-- Initialize Swiper -->
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				add: 'http://www.water.qtetech.cn/',
+				url: 'http://www.water.qtetech.cn/index.php?g=Fawtoyota&m=Ruisj&a=listd',
+				list: [],
+			},
+			type: 'get',
+			created: function() {
+				var that = this;
+			},
+			mounted() {
+				var that = this;
+				that.xuanran()
+
+			},
+			methods: {
+				xuanran() {
+					var that = this;
+					$.ajax({
+						url: that.url,
+						type: "POST",
+						data: {
+							is_type: 'pc'
+						},
+						dataType: 'json', //服务器返回json格式数据
+						success: function(data) {
+							console.log(data)
+							if (data.status == 200) {
+								that.list = data.data
+								that.swiper()
+							}
+						}
+					});
+				},
+				swiper() {
+					new Swiper('.swiper-container-h', {
+						direction: 'vertical',
+						// spaceBetween: 50,
+						pagination: {
+							el: '.swiper-pagination-h',
+							clickable: true,
+						},
+						// freeMode: true,
+						observer: true,
+						observeParents: true,
+						observeSlideChildren: true,
+					});
+					setTimeout(function() {
+						new Swiper('.swiper-container-v', {
+							// spaceBetween: 50,
+							direction: 'horizontal',
+							autoplay: true,
+							loop: true,
+							pagination: {
+								el: '.swiper-pagination-v',
+								clickable: true,
+							},
+							// freeMode: true,
+							observer: true,
+							observeParents: true,
+							observeSlideChildren: true,
+						});
+					}, 300)
+				},
+				guanyu() {
+					window.location.href = "guanyu.html"
+				}
+
+			}
+		})
+	</script>
+</html>

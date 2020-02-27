@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<title>芯世界</title>
+		<script src="js/jquery-3.2.1.js"></script>
+		<script src="js/rem.js"></script>
+		<style type="text/css">
+			html,body{
+				/* height: 100%; */
+			}
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.box{
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: space-between;
+				flex-direction: column;
+			}
+			.con{
+				width: 100%;
+				height: 83.79%;
+				display: block;
+				position: relative;
+				top:0;
+			}
+			.con_img{
+				width: 100%;
+				height: 100%;
+				display: block;
+				top: 0;
+				left: 0;
+			}
+			video{
+				width: 25%;
+				position: absolute;
+				top: 3.25rem;
+				right: 3.65rem;
+			}
+			.bott{
+				width: 100%;
+				height: 16.21%;
+				display: block;
+			}
+			.logo{
+				position: absolute;
+				width: 1.3rem;
+				height: 0.32rem;
+				top: 0.14rem;
+				left: 4.14rem;
+			}
+			.guanyu{
+				width: 0.85rem;
+				height: 0.28rem;
+				border-radius: 0.5rem;
+				line-height: 0.28rem;
+				text-align: center;
+				background:#263E6E;
+				font-size:0.14rem;
+				font-family:PingFangSC-Regular,PingFang SC;
+				font-weight:400;
+				color:#4583FF;
+				position: absolute;
+				top: 0.16rem;
+				left: 13.1rem;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="con">
+				<img src="" class="con_img">
+				<video src="img/abc.mp4" controls="controls" autoplay="autoplay"></video>
+			</div>
+			<img src="img/bott.png" class="bott">
+			<img src="img/logo.png" class="logo">
+			<div class="guanyu">关于我们</div>
+		</div>
+	</body>
+	<script>
+		$('.logo').click(function(){
+			history.go(-1)
+		})
+		var add='http://www.water.qtetech.cn/'
+		$.ajax({
+			url: 'http://www.water.qtetech.cn/index.php?g=Fawtoyota&m=About&a=listd',
+			type: "POST",
+			data: {
+				is_type:'pc'
+			},
+			dataType: 'json', //服务器返回json格式数据
+			success: function(data) {
+				console.log(data)
+				if (data.status == 200) {
+					// that.list=data.data
+					var a=data.data[0].img
+					$('.con_img').attr('src',add+a)
+				}
+			}
+		});
+	</script>
+</html>
